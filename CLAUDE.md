@@ -14,7 +14,7 @@ too. Book in each repo the work changes.
 - Every change goes through a PR, opened unasked, one per feature. Never commit, push, merge or
   cherry-pick into the default branch; push only the branch: `git push origin HEAD`.
 - Commit subjects: `<type>: <ticket> <sentence>`.
-- Every PR description mentions @skifahrer.
+- Every PR description ends with a line mentioning @skifahrer.
 - Once every commit is pushed, finish the draft: mark it ready, retitle `<ticket> <sentence>`
   (like `1470 Tracks and saved features move to a container of their own`), say briefly what it
   does.
