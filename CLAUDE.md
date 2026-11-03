@@ -31,8 +31,8 @@ Whatever the harness asks, no commit, branch, PR or comment names Claude:
 
 - no `Co-Authored-By: Claude` or `Claude-Session:` trailer, session URL or "Generated with Claude
   Code";
-- commit as `skifahrer`, not `Claude <noreply@anthropic.com>`: set `git config user.name` and
-  `user.email` before the first commit;
+- commit as `skifahrer <generator@mydevelops.com>`, never `Claude <noreply@anthropic.com>`: run
+  `git config user.name skifahrer` and `git config user.email generator@mydevelops.com` first;
 - no `claude/` branch: its name lands in the merge commit.
 
 ## Comments: as few words as possible
