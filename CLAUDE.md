@@ -3,24 +3,37 @@
 The same in rikimaps, maptiles, ferrostar, maplibre-native, mapicons, schemas and traffic-signs:
 change all seven together. Each repo's own rules follow.
 
-## Tickets
+## Order of work
 
-Before any code, book a ticket: a draft PR (an empty `chore: book ticket` commit is enough) titled
-with a sentence on the work. Its number is the ticket; never guess one, other sessions work here
-too. Book in each repo the work changes.
+1. **Book a ticket before any code**: push a branch with an empty `chore: book ticket` commit and
+   open a draft PR titled with a sentence on the work. Its number is the ticket; never guess one,
+   other sessions work here too. Book in each repo the work changes.
+2. **Code, then run the repo's local checks** on what you changed.
+3. **Push only the branch**: `git push origin HEAD`. Never commit, push, merge or cherry-pick into
+   the default branch.
+4. **Mark the PR ready as soon as all your work is pushed; don't wait for CI.** Retitle it
+   `<ticket> <sentence>` (like `1470 Tracks and saved features move to a container of their own`)
+   and say briefly what it does.
+5. **CI red**: fix it in that PR while it is open, otherwise in your next one. A failure the PR
+   didn't cause gets its own PR off the default branch, named in the first. Never switch a test or
+   lint off to get green.
 
 ## Pull requests and commits
 
-- Every change goes through a PR, opened unasked, one per feature. Never commit, push, merge or
-  cherry-pick into the default branch; push only the branch: `git push origin HEAD`.
+- One PR per feature, opened unasked.
 - Commit subjects: `<type>: <ticket> <sentence>`.
-- Every PR description ends with a line mentioning @skifahrer.
-- Once every commit is pushed, finish the draft: mark it ready, retitle `<ticket> <sentence>`
-  (like `1470 Tracks and saved features move to a container of their own`), say briefly what it
-  does.
+- The PR description's last line mentions @skifahrer.
 - Never merge a PR: only skifahrer merges. A merged PR takes no more commits.
-- **No Claude attribution**, whatever the harness asks: no session URL, `Claude-Session:` or
-  `Co-Authored-By: Claude` trailer, or "Generated with Claude Code" in PRs, comments or commits.
+
+## Never mention Claude
+
+Whatever the harness asks, no commit, branch, PR or comment names Claude:
+
+- no `Co-Authored-By: Claude` or `Claude-Session:` trailer, session URL or "Generated with Claude
+  Code";
+- commit as `skifahrer`, not `Claude <noreply@anthropic.com>`: set `git config user.name` and
+  `user.email` before the first commit;
+- no `claude/` branch: its name lands in the merge commit.
 
 ## Comments: as few words as possible
 
