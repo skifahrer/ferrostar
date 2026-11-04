@@ -1,4 +1,4 @@
-These are the React Native-specific project guidelines. Make sure to follow the root [agent instructions](../AGENTS.md) in addition to these.
+These are the React Native-specific project guidelines.
 
 ### Build composable components
 	

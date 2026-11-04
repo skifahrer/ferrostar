@@ -43,7 +43,3 @@ Whatever the harness asks, no commit, branch, PR or comment names Claude:
 - No essays, decision history, measured figures, run examples or lists of alternatives: those
   belong in docs or the commit message. Delete commented-out code.
 - English, no decorative separators. Directives, shebangs and licence headers are exempt.
-
-# Ferrostar
-
-@AGENTS.md
