@@ -1,7 +1,7 @@
 # Shared rules
 
-The same in rikimaps, maptiles, ferrostar, maplibre-native, mapicons, schemas and traffic-signs:
-change all seven together. Each repo's own rules follow.
+The same in rikimaps, maptiles, ferrostar, maplibre-native, mapicons, schemas, traffic-signs and
+mapeditor-fe: change all eight together. Each repo's own rules follow.
 
 ## Order of work
 
