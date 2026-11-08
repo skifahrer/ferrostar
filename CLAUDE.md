@@ -20,9 +20,21 @@ mapeditor-fe: change all eight together. Each repo's own rules follow.
 
 ## Tests
 
-A change in behaviour brings unit tests, a change on screen UI tests too, each commented with your
-ticket (`// 1470 …`). Before pushing, run the unit tests of each part you touched; UI tests run at
-night.
+Every code change brings unit tests; one that shows on screen brings UI tests too. Each test you
+add or change carries your ticket in its comment (`// 1470 …`). Before pushing, run the unit tests
+of each part you touched; UI tests run at night. A repo missing the tool below gets it with the
+first change that needs it.
+
+| Repo | Unit | UI |
+|---|---|---|
+| rikimaps | XCTest (`Riki MapsTests`) | XCUITest (`Riki MapsUITests`) |
+| maplibre-native | gtest (`test/`) | `platform/ios/riki-test` on the simulator, `render-test/` |
+| maptiles | `unittest`, `node --test` | Playwright (`workers/tests/browser.mjs`) |
+| mapeditor-fe | Vitest | Playwright (`e2e/`) |
+| mapicons | `unittest` | Playwright for Python on `osmcat/web` |
+| traffic-signs | `unittest` (`tests/`) | Playwright for Python on `viewer/` |
+| ferrostar | `cargo nextest`, XCTest, JUnit | snapshot tests (iOS, Android) |
+| schemas | `tools/validate.py` on `tests/valid`, `tests/invalid` | none |
 
 ## PRs and commits
 
