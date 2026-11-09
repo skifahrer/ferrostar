@@ -6,7 +6,41 @@ on:
   pull_request:
 
 jobs:
+  changes:
+    name: Code or docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - id: diff
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          case "$EVENT" in
+            pull_request) files=$(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename') || files="" ;;
+            push) files=$(gh api "repos/$REPO/compare/$BEFORE...$AFTER" --jq '.files[].filename') || files="" ;;
+            *) files="" ;;
+          esac
+          # an unknown change counts as code; compare lists at most 300 files
+          if [ -n "$files" ] && [ "$(wc -l <<< "$files")" -lt 300 ] && ! grep -qvE '\.md$' <<< "$files"; then
+            echo "::notice::only docs changed, so no tests run"
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          fi
+
   format-lint:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: macos-26
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-ios-swiftformat
@@ -31,6 +65,8 @@ jobs:
         echo "::warning::swiftformat may be outdated. Check your version matches."
 
   build-ferrostar:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: macos-26
     permissions:
       contents: write  # To auto-commit Package.swift and binding changes
