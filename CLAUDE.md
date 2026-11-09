@@ -37,6 +37,8 @@ first change that needs it.
 | ferrostar | `cargo nextest`, XCTest, JUnit | snapshot tests (iOS, Android) |
 | schemas | `tools/validate.py` on `tests/valid`, `tests/invalid` | none |
 
+A change to docs alone (`*.md`) runs no tests, locally or in CI.
+
 ## PRs and commits
 
 - One PR per feature, opened unasked. Only skifahrer merges; a merged PR takes no more commits.
