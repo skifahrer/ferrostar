@@ -5,9 +5,10 @@ mapeditor-fe: change all eight together. Each repo's own rules follow.
 
 ## Order of work
 
-1. **Book a ticket before any code**: push a branch with an empty `chore: book ticket` commit and
-   open a draft PR titled with a sentence on the work. Its number is the ticket; never guess one.
-   Book in each repo the work changes.
+1. **Book a ticket before any code**: push a branch `<kind>/<description>` with an empty
+   `chore: book ticket` commit and open a draft PR titled with a sentence on the work. Its number
+   is the ticket; never guess one. Book in each repo the work changes. Kinds: `feature`, `bug`,
+   `perf`, `plan`, `docs`, `dependency`, `chore` (`feature/saved-points-sync`).
 2. **Code with its tests**, then run the repo's local checks on what you changed.
 3. **Push only the branch** (`git push origin HEAD`); never commit, push, merge or cherry-pick into
    the default branch.
