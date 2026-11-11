@@ -34,6 +34,7 @@ first change that needs it.
 | maplibre-native | gtest (`test/`) | `platform/ios/riki-test` on the simulator, `render-test/` |
 | maptiles | `unittest`, `node --test` | Playwright (`workers/tests/browser.mjs`) |
 | mapeditor-fe | Vitest + Testing Library | Playwright (`e2e/`) |
+| mapeditor-fe `server/` | PHPUnit (`server/tests`) | Playwright projects `web`, `web-under-path` |
 | mapicons | `unittest` | Playwright for Python on `osmcat/web` |
 | traffic-signs | `unittest` (`tests/`) | Playwright for Python on `viewer/` |
 | ferrostar | `cargo nextest`, XCTest, JUnit | snapshot tests (iOS, Android) |
