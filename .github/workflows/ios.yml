@@ -129,61 +129,6 @@ jobs:
         path: common/target/ios/libferrostar-rs.xcframework.zip
         retention-days: 5
 
-  build-demo:
-    runs-on: macos-26
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-ios-build-demo
-      cancel-in-progress: true
-    needs: build-ferrostar
-    strategy:
-      matrix:
-        scheme: [
-          "iOS Demo"
-        ]
-
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v6
-
-    - uses: taiki-e/install-action@v2
-      with:
-        tool: just
-
-    - name: Configure Package.swift for local development
-      run: just set-package-swift-local
-
-    - name: Download libferrostar-rs.xcframework
-      uses: actions/download-artifact@v4
-      with:
-        path: common
-        name: libferrostar-rs.xcframework.zip
-
-    - name: Unzip libferrostar-rs.xcframework
-      run: ditto -x -k libferrostar-rs.xcframework.zip target/ios/
-      working-directory: common
-
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '26.3'
-
-    - name: Install xcbeautify
-      run: brew install xcbeautify
-
-    - name: Rename API-Keys.plist template
-      run: mv apple/DemoApp/API-Keys.plist.template apple/DemoApp/API-Keys.plist
-
-    - name: Build ${{ matrix.scheme }}
-      run: xcodebuild -scheme "${{ matrix.scheme }}" build -configuration Debug -skipMacroValidation \
-        CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO | xcbeautify && exit ${PIPESTATUS[0]}
-      working-directory: apple/DemoApp
-
-    - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v4
-      with:
-        name: Demo-Package.swift
-        path: Package.swift
-        retention-days: 5
-
   test:
     runs-on: macos-26
     concurrency:

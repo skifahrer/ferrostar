@@ -2,6 +2,5 @@
 
 android/demo-app/** -linguist-detectable
 
-apple/DemoApp/** -linguist-detectable
 
 apple/Sources/UniFFI/** linguist-generated=true
