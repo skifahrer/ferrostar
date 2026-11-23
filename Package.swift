@@ -39,29 +39,13 @@ let package = Package(
     name: "FerrostarCore",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v16),
+        .iOS(.v15),
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
+        // Core only: the v16 floor upstream belongs to the SwiftUI and CarPlay targets.
         .library(
             name: "FerrostarCore",
             targets: ["FerrostarCore", "FerrostarCoreFFI"]
-        ),
-        .library(
-            name: "FerrostarMapLibreUI",
-            targets: [
-                "FerrostarMapLibreUI",
-                "FerrostarSwiftUI",
-                "FerrostarCarPlayUI",
-            ] // TODO: Remove FerrostarSwiftUI from FerrostarMapLibreUI once we can fix the demo app swift package config (broken in Xcode 15.3)
-        ),
-        .library(
-            name: "FerrostarSwiftUI",
-            targets: ["FerrostarSwiftUI"]
-        ),
-        .library(
-            name: "FerrostarCarPlayUI",
-            targets: ["FerrostarCarPlayUI"]
         ),
     ],
     dependencies: [
