@@ -3,11 +3,20 @@
 from ready import Check
 
 # a fork of upstream: clippy holds a file to its warnings once the branch touches it
-CLIPPY = (
-    "out=$(cd common && cargo clippy --workspace --all-targets --quiet --message-format=short 2>&1)"
-    ' || { echo "$out"; exit 1; }; hits=""; for p in "$@"; do'
-    ' hits="$hits$(echo "$out" | grep -F "${p#common/}:")"; done; [ -z "$hits" ] || { echo "$hits"; exit 1; }'
-)
+CLIPPY = """
+import json, subprocess, sys
+touched = {p.removeprefix("common/") for p in sys.argv[1:]}
+run = subprocess.run(["cargo", "clippy", "--workspace", "--all-targets", "--quiet", "--message-format=json"],
+                     cwd="common", capture_output=True, text=True)
+hits = []
+for line in run.stdout.splitlines():
+    message = json.loads(line).get("message") if line.startswith("{") else None
+    spans = [s for s in (message or {}).get("spans", []) if s.get("is_primary")]
+    if message and (message["level"] == "error" or any(s["file_name"] in touched for s in spans)):
+        hits.append(message["rendered"])
+print("".join(hits) or (run.stderr if run.returncode else ""), end="")
+sys.exit(1 if hits or run.returncode else 0)
+"""
 RUST = ("common/*",)
 APPLE = ("apple/*", "Package.swift", ".swiftformat", ".swiftlint.yml")
 ANDROID = ("android/*",)
@@ -15,9 +24,7 @@ WEB = ("web/*",)
 
 CHECKS = [
     Check("ready's tests", ["python3", "tools/test-ready.py"], covers=("tools/*ready*",)),
-    Check(
-        "clippy", ["sh", "-c", CLIPPY, "clippy"], covers=("common/*.rs",), needs="cargo", on_paths=True, limit=30 * 60
-    ),
+    Check("clippy", ["python3", "-c", CLIPPY], covers=("common/*.rs",), needs="cargo", on_paths=True, limit=30 * 60),
     Check("format, Rust", ["sh", "-c", "cd common && cargo fmt --check"], covers=RUST, needs="cargo"),
     Check("SwiftLint", ["swiftlint", "lint", "--quiet", "--strict"], covers=APPLE, needs="swiftlint"),
     Check("format, Swift", ["swiftformat", ".", "--lint"], covers=APPLE, needs="swiftformat"),
