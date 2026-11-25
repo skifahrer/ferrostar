@@ -8,13 +8,16 @@ mapeditor-fe: change all eight together. Each repo's own rules follow.
 1. **Book a ticket before any code**: push a branch `<kind>/<description>` with an empty
    `chore: book ticket` commit and open a draft PR titled with a sentence on the work. Its number
    is the ticket; never guess one. Book in each repo the work changes. Kinds: `feature`, `bug`,
-   `hang`, `perf`, `plan`, `docs`, `dependency`, `chore` (`feature/saved-points-sync`).
+   `hang`, `perf`, `plan`, `docs`, `dependency`, `chore` (`feature/saved-points-sync`). Its
+   description starts `Before ready:` and the checks to run, so whoever picks it up runs them
+   (`tools/ready.py --mark` in rikimaps, the local checks or the Tests table elsewhere).
 2. **Code with its tests**, then run the repo's local checks on what you changed.
 3. **Push only the branch** (`git push origin HEAD`); never commit, push, merge or cherry-pick into
    the default branch.
-4. **Mark the PR ready once all work is pushed**, without waiting for CI: title it
-   `<ticket> <sentence>` (`1470 Tracks and saved features move to a container of their own`), say
-   briefly what it does, and mention @skifahrer on the description's last line.
+4. **Mark the PR ready once all work is pushed** and its `Before ready:` checks pass, without
+   waiting for CI: title it `<ticket> <sentence>` (`1470 Tracks and saved features move to a
+   container of their own`), say briefly what it does, and mention @skifahrer on the
+   description's last line.
 5. **CI red**: fix it in that PR, or in your next one once it is merged. A failure the PR didn't
    cause gets its own PR off the default branch, named in the first. Never switch a test or lint
    off.
