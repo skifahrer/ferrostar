@@ -8,7 +8,8 @@ mapeditor-fe: change all eight together. Each repo's own rules follow.
 1. **Book a ticket before any code**: push `<kind>/<description>` (`feature`, `bug`, `hang`,
    `perf`, `plan`, `docs`, `dependency`, `chore`) with an empty `chore: book ticket` commit, and
    open a draft PR titled with a sentence on the work, its description starting `Before ready:`
-   and the checks to run. Its number is the ticket; never guess one. Book in each repo it changes.
+   and the checks to run, labelled `cloud` when booked in a cloud session and `local` when booked
+   on a machine. Its number is the ticket; never guess one. Book in each repo it changes.
 2. **Code with its tests** and push only the branch (`git push origin HEAD`).
 3. **Run `tools/ready.py`**: it checks the branch, commits and PR words, then runs
    `tools/ready_repo.py`'s checks on what changed. Fix what it names; when it ends `Ready.`, mark
@@ -39,7 +40,7 @@ separators; English. Directives, shebangs and licence headers are exempt.
 
 `tools/ready.py` and `tools/test-ready.py` are the same in all eight repos: change them in all,
 then their sha256 here:
-sha256 `980c87958bed4dd1e27d51bf79747a6b5ddcc55eeed67c16e3ab543f1436ce2e`.
+sha256 `9e3ee6489147f951d3bbb09854e52d2d16754b33d11bae033a2c1ab870e5ab09`.
 
 # Ferrostar
 
