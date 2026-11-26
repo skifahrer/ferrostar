@@ -94,3 +94,4 @@ API-Keys.plist
 # Editor temp files
 *~
 react-native/example/.env
+__pycache__/

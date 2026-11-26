@@ -37,11 +37,12 @@ AUTHOR = "skifahrer <generator@mydevelops.com>"
 SUBJECT = re.compile(r"^[a-z]+: (\d+) \S")
 BOOKING = "chore: book ticket"
 NAMES_CLAUDE = re.compile(
-    r"co-authored-by:\s*claude|claude-session:|claude\.ai/code|generated with \[?claude", re.IGNORECASE
+    r"co-authored-by:\s*claude|claude-session:|claude\.ai/code|generated (?:with|by) \[?claude", re.IGNORECASE
 )
 MENTION = "@skifahrer"
 BEFORE_READY = "Before ready:"
-REQUEST_FIELDS = "number,title,body,mergeable,isDraft,state"
+REQUEST_FIELDS = "number,title,body,mergeable,isDraft,state,labels"
+WHERE = ("cloud", "local")
 # READY_PLATFORM=linux tries the Linux run on a Mac.
 PLATFORM = os.environ.get("READY_PLATFORM", sys.platform)
 STEP_LIMIT = 15 * 60
@@ -109,6 +110,26 @@ def pull_request_faults(number, title, body):
     if NAMES_CLAUDE.search(title + "\n" + body):
         faults.append("the title or description names Claude")
     return faults
+
+
+def booked_here():
+    """The label a PR booked on this machine carries: a cloud session sets CLAUDE_CODE_REMOTE."""
+    return "cloud" if os.environ.get("CLAUDE_CODE_REMOTE") == "true" else "local"
+
+
+def label_names(labels):
+    """Label names from gh's `{"name": …}` objects or the GitHub API's plain strings."""
+    return {label["name"] if isinstance(label, dict) else label for label in labels or []}
+
+
+def label_faults(labels, here=None):
+    """A PR carries one of WHERE: where it was booked, which may not be where ready.py runs."""
+    found = label_names(labels) & set(WHERE)
+    if len(found) == 1:
+        return []
+    if found:
+        return ["the PR is labelled both `cloud` and `local`: keep the one for where it was booked"]
+    return [f"the PR has no `cloud` or `local` label: one booked here is `{here or booked_here()}`"]
 
 
 def code_paths(paths):
@@ -337,7 +358,8 @@ def check_branch_and_request(report, base, given=None):
     else:
         report.judge(
             "pull request's words",
-            pull_request_faults(request["number"], request["title"], request["body"]),
+            pull_request_faults(request["number"], request["title"], request["body"])
+            + label_faults(request.get("labels")),
             f"#{request['number']}",
         )
     report.judge("commits", commit_faults(commits_on_branch(base)))
