@@ -1,7 +1,7 @@
 # Shared rules
 
-Identical in rikimaps, maptiles, ferrostar, maplibre-native, mapicons, schemas, traffic-signs and
-mapeditor-fe: change all eight together. Each repo's own rules follow.
+Identical in rikimaps, maptiles, ferrostar, maplibre-native, mapicons, schemas, traffic-signs,
+mapeditor-fe and maps-core: change all nine together. Each repo's own rules follow.
 
 ## Order of work
 
@@ -38,7 +38,7 @@ Comment only where the code can't say it, and why, never what: under 90 characte
 at most; a docstring is one sentence. No history, examples, commented-out code or decorative
 separators; English. Directives, shebangs and licence headers are exempt.
 
-`tools/ready.py` and `tools/test-ready.py` are the same in all eight repos: change them in all,
+`tools/ready.py` and `tools/test-ready.py` are the same in all nine repos: change them in all,
 then their sha256 here:
 sha256 `9e3ee6489147f951d3bbb09854e52d2d16754b33d11bae033a2c1ab870e5ab09`.
 
