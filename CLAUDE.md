@@ -40,7 +40,7 @@ separators; English. Directives, shebangs and licence headers are exempt.
 
 `tools/ready.py` and `tools/test-ready.py` are the same in all nine repos: change them in all,
 then their sha256 here:
-sha256 `9e3ee6489147f951d3bbb09854e52d2d16754b33d11bae033a2c1ab870e5ab09`.
+sha256 `83ae8535390e79a8ab3e6820526b9d75c59c7f1fbabfe0a5c0b728f16921b8a3`.
 
 # Ferrostar
 

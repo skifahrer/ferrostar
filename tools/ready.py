@@ -36,6 +36,7 @@ KINDS = ("feature", "bug", "hang", "perf", "plan", "docs", "dependency", "chore"
 AUTHOR = "skifahrer <generator@mydevelops.com>"
 SUBJECT = re.compile(r"^[a-z]+: (\d+) \S")
 BOOKING = "chore: book ticket"
+REVERT = re.compile(r'^Revert "(.*)"$')
 NAMES_CLAUDE = re.compile(
     r"co-authored-by:\s*claude|claude-session:|claude\.ai/code|generated (?:with|by) \[?claude", re.IGNORECASE
 )
@@ -75,6 +76,13 @@ def branch_fault(branch, default="master"):
     return None
 
 
+def reverted(subject):
+    """The subject a `git revert` commit's subject names, unwrapped as often as it was reverted."""
+    while match := REVERT.match(subject):
+        subject = match.group(1)
+    return subject
+
+
 def commit_faults(commits):
     """`commits` are (subject, author, body). A merge, by anyone, and the booking commit pass.
 
@@ -85,6 +93,8 @@ def commit_faults(commits):
         short = subject[:60]
         if NAMES_CLAUDE.search(subject + "\n" + body):
             faults.append(f"`{short}` names Claude")
+        # 3829 git revert names a commit so, and a pushed one is never renamed
+        subject = reverted(subject)
         if subject.startswith("Merge "):
             continue
         if author != AUTHOR:
