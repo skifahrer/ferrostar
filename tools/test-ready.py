@@ -58,6 +58,16 @@ class JudgingTests(unittest.TestCase):
         named = "Co-Authored-By: Claude <noreply@anthropic.com>"
         self.assertEqual(len(ready.commit_faults([(merge, "Someone <a@b.c>", named)])), 1)
 
+    # 3829 git revert writes Revert "<subject>", and a pushed one stays
+    def test_a_revert_passes_as_the_commit_it_reverts_would(self):
+        twice = 'Revert "Revert "fix: 3199 The store opens""'
+        for subject in ('Revert "fix: 3199 The store opens"', twice, 'Revert "chore: book ticket"'):
+            with self.subTest(subject):
+                self.assertEqual(ready.commit_faults([(subject, BY, "")]), [])
+        self.assertEqual(len(ready.commit_faults([('Revert "The store opens"', BY, "")])), 1)
+        faults = ready.commit_faults([('Revert "fix: 3199 It opens"', "Someone <a@b.c>", "")])
+        self.assertEqual(len(faults), 1)
+
     def test_a_commit_by_somebody_else_is_a_fault(self):
         faults = ready.commit_faults([("fix: 3199 The store opens", "Someone <a@b.c>", "")])
         self.assertEqual(len(faults), 1)
