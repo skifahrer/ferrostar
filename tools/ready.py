@@ -94,14 +94,14 @@ def commit_faults(commits):
         if NAMES_CLAUDE.search(subject + "\n" + body):
             faults.append(f"`{short}` names Claude")
         # 3829 git revert names a commit so, and a pushed one is never renamed
-        subject = reverted(subject)
-        if subject.startswith("Merge "):
+        named = reverted(subject)
+        if named.startswith("Merge "):
             continue
         if author != AUTHOR:
             faults.append(f"`{short}` is by {author}, not {AUTHOR}")
-        if subject == BOOKING:
+        if named == BOOKING:
             continue
-        if not SUBJECT.match(subject):
+        if not SUBJECT.match(named):
             faults.append(f"`{short}` is not `<type>: <ticket> <sentence>`")
     return faults
 
